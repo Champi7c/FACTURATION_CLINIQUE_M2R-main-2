@@ -1,40 +1,54 @@
-# Stage 1: Build the React application
-FROM node:18-alpine AS build
+# ============================================
+# Stage 1: Build React en production
+# ============================================
+FROM node:20-alpine AS build
 
 WORKDIR /app
 
-# Copy package files
+# Copier les fichiers de dépendances
 COPY package*.json ./
 
-# Install dependencies (fallback to npm install if npm ci fails)
+# Installer les dépendances
 RUN npm ci || npm install
 
-# Copy source code
+# Copier le code source
 COPY . .
 
-# Build arguments for environment variables
+# Variables d'environnement pour le build (injectées au build)
 ARG REACT_APP_API_BASE_URL
-ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
-# Désactiver la génération des source maps pour éviter les erreurs 404
+ENV REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL}
 ENV GENERATE_SOURCEMAP=false
+ENV NODE_ENV=production
 
-# Build the application
+# Build de l'application React
 RUN npm run build
 
-# Stage 2: Serve with serve (simple HTTP server)
-FROM node:18-alpine
+# ============================================
+# Stage 2: Servir avec Nginx (image légère)
+# ============================================
+FROM nginx:alpine
 
-# Install serve globally
-RUN npm install -g serve
+# Outil pour healthcheck
+RUN apk add --no-cache curl
 
-WORKDIR /app
+# Supprimer la config par défaut
+RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy built files from build stage
-COPY --from=build /app/build ./build
+# Copier la configuration Nginx personnalisée
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 3000
-EXPOSE 3000
+# Copier le build depuis le stage précédent
+COPY --from=build /app/build /usr/share/nginx/html
 
-# Start serve
-CMD ["serve", "-s", "build", "-l", "3000"]
+# Fichiers statiques en lecture seule
+RUN chown -R nginx:nginx /usr/share/nginx/html && \
+    chmod -R 755 /usr/share/nginx/html
 
+# Exposition du port 80 (Nginx)
+EXPOSE 80
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f -s http://127.0.0.1:80/ || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]

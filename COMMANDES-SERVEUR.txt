@@ -1,0 +1,31 @@
+================================================================================
+  À FAIRE SUR LE SERVEUR (72.62.29.141) – Copier-coller ces commandes
+================================================================================
+
+1. Se connecter au serveur (sur votre Mac, dans le Terminal) :
+
+   ssh root@72.62.29.141
+
+
+2. Une fois connecté au serveur, exécuter :
+
+   git clone https://github.com/Champi7c/FACTURATION_CLINIQUE_M2R-main-2.git /opt/facturation-clinique
+   cd /opt/facturation-clinique
+   chmod +x install.sh
+   ./install.sh
+
+
+3. Attendre la fin du script (build + démarrage). Puis ouvrir dans le navigateur :
+
+   http://72.62.29.141:9000        (application)
+   http://72.62.29.141:9001/api/  (API)
+   http://72.62.29.141:9002       (phpMyAdmin)
+
+
+Optionnel : changer le mot de passe MySQL avant de lancer install.sh
+
+   nano .env
+   (modifier DB_PASSWORD=..., sauvegarder Ctrl+O Entrée Ctrl+X)
+   ./install.sh
+
+================================================================================

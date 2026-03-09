@@ -45,5 +45,9 @@ EXPOSE 8000
 # Set entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
 
+# Healthcheck (vérification que Gunicorn écoute sur le port)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD python -c "import socket; socket.create_connection(('127.0.0.1', 8000), timeout=5)" || exit 1
+
 # Default command: use gunicorn for production
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--timeout", "120", "facturation_clinique.wsgi:application"]

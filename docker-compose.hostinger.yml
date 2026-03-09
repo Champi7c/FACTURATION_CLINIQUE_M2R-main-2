@@ -1,0 +1,104 @@
+# ============================================
+# Facturation Clinique – Version Hostinger (images Docker Hub uniquement)
+# ============================================
+# À utiliser avec le Docker Manager Hostinger (Compose from URL).
+# Les images frontend et backend doivent déjà être sur Docker Hub
+# (poussées par le CI/CD ou manuellement).
+#
+# Dans le Docker Manager, définir les variables d'environnement :
+#   DOCKER_REGISTRY, IMAGE_TAG, DB_PASSWORD, SECRET_KEY, ALLOWED_HOSTS,
+#   CORS_ALLOWED_ORIGINS, REACT_APP_API_BASE_URL (optionnel pour le build)
+# ============================================
+
+services:
+  frontend:
+    image: ${DOCKER_REGISTRY:-devcgfbourse}/facturation-clinique-frontend:${IMAGE_TAG:-latest}
+    container_name: facturation_frontend
+    restart: always
+    ports:
+      - "${FRONTEND_PORT:-9000}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  backend:
+    image: ${DOCKER_REGISTRY:-devcgfbourse}/facturation-clinique-backend:${IMAGE_TAG:-latest}
+    container_name: facturation_backend
+    restart: always
+    ports:
+      - "${BACKEND_PORT:-9001}:8000"
+    environment:
+      - USE_SQLITE=False
+      - DB_HOST=mysql
+      - DB_NAME=${DB_NAME:-facturation_clinique}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=3306
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=False
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1,0.0.0.0,backend}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-http://localhost:9000}
+    volumes:
+      - static_files:/app/staticfiles
+      - media_files:/app/media
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('127.0.0.1', 8000), timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  mysql:
+    image: mysql:8.0
+    container_name: facturation_mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-facturation_clinique}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${MYSQL_PORT:-9330}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: facturation_phpmyadmin
+    restart: always
+    ports:
+      - "${PHPMYADMIN_PORT:-9002}:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${DB_PASSWORD}
+      UPLOAD_LIMIT: 128M
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+  static_files:
+  media_files:
+
+networks:
+  app-network:
+    driver: bridge
+    name: app-network
