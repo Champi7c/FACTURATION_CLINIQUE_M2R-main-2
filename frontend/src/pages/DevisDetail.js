@@ -80,7 +80,7 @@ const DevisDetail = () => {
           <div className="devis-header">
             <div className="devis-clinique">
               <div className="devis-logo-container">
-                <img src={window.location.protocol === 'file:' ? './NABY.jpg' : '/NABY.jpg'} alt={`Logo ${CLINIQUE.nom}`} className="devis-logo" />
+                <img src={window.location.protocol === 'file:' ? './logo.png' : '/logo.png'} alt={`Logo ${CLINIQUE.nom}`} className="devis-logo" />
                 <div className="devis-clinique-info">
                   <h3>{CLINIQUE.nom}</h3>
                   <p>{CLINIQUE.adresse}</p>

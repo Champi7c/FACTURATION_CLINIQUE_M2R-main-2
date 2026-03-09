@@ -222,7 +222,7 @@ const DevisMensuel = () => {
           <div className="card-body">
             <div className="devis-mensuel-header">
               <div className="devis-logo-container">
-                <img src={window.location.protocol === 'file:' ? './NABY.jpg' : '/NABY.jpg'} alt={`Logo ${CLINIQUE.nom}`} className="devis-logo" />
+                <img src={window.location.protocol === 'file:' ? './logo.png' : '/logo.png'} alt={`Logo ${CLINIQUE.nom}`} className="devis-logo" />
                 <div>
                   <h3>{CLINIQUE.nom}</h3>
                   <p>{CLINIQUE.adresse}</p>

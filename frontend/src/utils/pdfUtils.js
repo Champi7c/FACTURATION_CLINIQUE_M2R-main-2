@@ -3,7 +3,8 @@ import html2canvas from 'html2canvas';
 import { CLINIQUE } from '../config/clinique';
 
 // Chemin du logo (simplifié pour web uniquement)
-const logoPath = '/NABY.jpg';
+const logoPath = '/logo.png';
+const logoFormat = 'PNG';
 
 /**
  * Génère un PDF pour un devis individuel - Format identique à la plateforme
@@ -53,7 +54,7 @@ export const generatePDFDevis = async (devis, patient, analyses, lignes, ipms = 
         img.onload = () => {
           const imgWidth = 20;
           const imgHeight = (img.height * imgWidth) / img.width;
-          doc.addImage(img, 'JPEG', margin, headerY, imgWidth, imgHeight);
+          doc.addImage(img, logoFormat, margin, headerY, imgWidth, imgHeight);
           resolve();
         };
         img.onerror = () => resolve();
@@ -346,7 +347,7 @@ export const generatePDFDevisMensuel = async (
         img.onload = () => {
           const imgWidth = 20;
           const imgHeight = (img.height * imgWidth) / img.width;
-          doc.addImage(img, 'JPEG', margin, headerY, imgWidth, imgHeight);
+          doc.addImage(img, logoFormat, margin, headerY, imgWidth, imgHeight);
           resolve();
         };
         img.onerror = () => resolve();
