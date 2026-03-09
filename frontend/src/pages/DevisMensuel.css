@@ -1,0 +1,128 @@
+.devis-mensuel-page {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.devis-mensuel-page .card-body {
+  padding: 20px;
+}
+
+.devis-mensuel-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--bleu-nuit);
+}
+
+.devis-mensuel-header h3 {
+  color: var(--bleu-nuit);
+  margin-bottom: 10px;
+}
+
+.devis-mensuel-header .devis-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.devis-mensuel-header .devis-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.devis-mensuel-header h4 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.devis-mensuel-content {
+  margin-top: 30px;
+  width: 100%;
+}
+
+.devis-mensuel-content .table {
+  width: 100% !important;
+  table-layout: auto;
+}
+
+.devis-mensuel-content .table th,
+.devis-mensuel-content .table td {
+  white-space: nowrap;
+  padding: 12px 15px;
+}
+
+.devis-item {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.devis-item h5 {
+  margin-bottom: 15px;
+  color: var(--bleu-nuit);
+}
+
+.devis-total-general {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.devis-signature {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.signature-line {
+  width: 200px;
+  height: 1px;
+  background: #333;
+  margin: 10px auto;
+}
+
+.signature-name {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* S'assurer que tous les prix sont en noir et lisibles */
+.devis-mensuel-content .table td.text-end,
+.devis-mensuel-content .table th.text-end {
+  color: #000 !important;
+  font-weight: 600;
+}
+
+.devis-mensuel-content .table tfoot th {
+  color: #000 !important;
+}
+
+.devis-mensuel-content .table-total {
+  background-color: #f8f9fa !important;
+  color: #000 !important;
+}
+
+.devis-mensuel-content .table-total th {
+  color: #000 !important;
+  background-color: #f8f9fa !important;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  /* S'assurer que les prix sont en noir lors de l'impression */
+  .devis-mensuel-content .table td.text-end,
+  .devis-mensuel-content .table th.text-end,
+  .devis-mensuel-content .table-total th {
+    color: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+

@@ -1,0 +1,58 @@
+# Commandes de diagnostic à exécuter sur le serveur
+# Copiez-collez ces commandes une par une dans votre terminal SSH
+
+# 1. État des conteneurs
+echo "=== ÉTAT DES CONTENEURS ==="
+docker ps -a | grep facturation
+
+# 2. Volumes MySQL
+echo ""
+echo "=== VOLUMES MYSQL ==="
+docker volume ls | grep -E "mysql|facturation"
+echo ""
+echo "Taille des volumes:"
+for vol in $(docker volume ls -q | grep -E "mysql|facturation"); do
+  echo "--- $vol ---"
+  docker volume inspect $vol --format '{{.Mountpoint}}' | xargs du -sh 2>/dev/null
+  docker volume inspect $vol --format '{{.Mountpoint}}' | xargs find 2>/dev/null | wc -l | xargs echo "Fichiers:"
+done
+
+# 3. Volume utilisé par le conteneur actuel
+echo ""
+echo "=== VOLUME UTILISÉ PAR LE CONTENEUR ACTUEL ==="
+docker inspect facturation_mysql --format '{{range .Mounts}}{{if eq .Destination "/var/lib/mysql"}}{{.Name}} -> {{.Source}}{{end}}{{end}}' 2>/dev/null || echo "Conteneur non trouvé"
+
+# 4. Accès MySQL
+echo ""
+echo "=== ACCÈS MYSQL ==="
+DB_PASS=$(grep DB_ROOT_PASSWORD .env 2>/dev/null | cut -d'=' -f2 | tr -d ' "' || echo "rootpassword")
+docker exec facturation_mysql mysql -u root -p"$DB_PASS" -e "SHOW DATABASES;" 2>&1 | grep -v "Warning"
+echo ""
+echo "Tables dans facturation_clinique:"
+docker exec facturation_mysql mysql -u root -p"$DB_PASS" -e "USE facturation_clinique; SHOW TABLES;" 2>&1 | grep -v "Warning"
+echo ""
+echo "Nombre de lignes dans chaque table:"
+docker exec facturation_mysql mysql -u root -p"$DB_PASS" -e "USE facturation_clinique; SELECT table_name, table_rows FROM information_schema.tables WHERE table_schema='facturation_clinique';" 2>&1 | grep -v "Warning"
+
+# 5. Accès backend
+echo ""
+echo "=== ACCÈS BACKEND ==="
+curl -I http://localhost:8000/api/health/ 2>&1 | head -5
+
+# 6. Configuration .env
+echo ""
+echo "=== CONFIGURATION .ENV ==="
+cat .env | grep -E "ALLOWED_HOSTS|DB_NAME|DB_USER|DB_ROOT_PASSWORD|DEBUG" | head -10
+
+# 7. Ports
+echo ""
+echo "=== PORTS UTILISÉS ==="
+lsof -ti:8000 && echo "Port 8000: Utilisé" || echo "Port 8000: Libre"
+lsof -ti:3000 && echo "Port 3000: Utilisé" || echo "Port 3000: Libre"
+lsof -ti:3317 && echo "Port 3317: Utilisé" || echo "Port 3317: Libre"
+
+# 8. Logs récents backend
+echo ""
+echo "=== LOGS BACKEND (10 dernières lignes) ==="
+docker logs facturation_backend --tail 10 2>&1
+

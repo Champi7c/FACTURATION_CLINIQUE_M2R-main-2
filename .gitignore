@@ -1,0 +1,23 @@
+# Clés SSH (NE JAMAIS COMMITER)
+id_ed25519_facturation_clinique
+id_ed25519_facturation_clinique.pub
+id_ed25519_github
+id_ed25519_github.pub
+*.pem
+*.key
+id_rsa*
+*.pub
+
+# Fichiers temporaires
+*.tar.gz
+/tmp/
+
+# Variables d'environnement
+.env
+.env.local
+.env.prod
+
+# Logs
+*.log
+
+backend/staticfiles/

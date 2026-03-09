@@ -1,0 +1,83 @@
+# =============================================================================
+# DOCKERFILE PRODUCTION - Frontend React
+# =============================================================================
+# Ce Dockerfile est optimisé pour la PRODUCTION:
+# - Multi-stage build pour réduire la taille de l'image
+# - Build optimisé avec React
+# - Serveur statique léger (serve)
+# - Pas de node_modules en production
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# STAGE 1: Builder - Compilation React
+# -----------------------------------------------------------------------------
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Variables d'environnement pour le build
+ENV NODE_ENV=production
+# Désactiver la génération des source maps pour éviter les erreurs 404
+ENV GENERATE_SOURCEMAP=false
+
+# Copier les fichiers de dépendances
+COPY package*.json ./
+
+# Installer les dépendances (production + dev pour le build)
+# Utiliser npm install au lieu de npm ci pour éviter les problèmes de synchronisation package-lock.json
+RUN npm install --include=dev
+
+# Copier le code source
+COPY . .
+
+# Arguments de build pour les variables d'environnement React
+ARG REACT_APP_API_BASE_URL=/api
+ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+
+# Build de l'application React
+RUN npm run build
+
+# Vérifier que le build a réussi
+RUN ls -la build/ && echo "Build successful!"
+
+# -----------------------------------------------------------------------------
+# STAGE 2: Production - Serveur statique
+# -----------------------------------------------------------------------------
+FROM node:18-alpine AS production
+
+# Labels pour documentation
+LABEL maintainer="DevOps Team" \
+      version="1.0" \
+      description="Facturation Clinique Frontend - Production"
+
+WORKDIR /app
+
+# Variables d'environnement
+ENV NODE_ENV=production
+
+# Installer serve globalement
+RUN npm install -g serve
+
+# Créer un utilisateur non-root pour la sécurité
+RUN addgroup -g 1001 -S appgroup \
+    && adduser -u 1001 -S appuser -G appgroup
+
+# Copier les fichiers buildés depuis le stage builder
+COPY --from=builder --chown=appuser:appgroup /app/build ./build
+
+# Changer vers l'utilisateur non-root
+USER appuser
+
+# Exposer le port
+EXPOSE 3000
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD wget -q --spider http://localhost:3000/ || exit 1
+
+# Démarrer le serveur statique
+# -s: mode SPA (Single Page Application) - redirige tout vers index.html
+# -l: port d'écoute
+# --no-clipboard: désactiver la copie dans le presse-papier
+CMD ["serve", "-s", "build", "-l", "3000", "--no-clipboard"]
+

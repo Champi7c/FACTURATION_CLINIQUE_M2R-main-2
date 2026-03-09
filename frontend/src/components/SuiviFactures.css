@@ -1,0 +1,94 @@
+.suivi-factures {
+  width: 100%;
+}
+
+.suivi-factures .stat-card {
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.suivi-factures .stat-card-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+}
+
+.suivi-factures .stat-card-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+  color: white;
+}
+
+.suivi-factures .stat-card-success {
+  background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+  color: white;
+}
+
+.suivi-factures .stat-card-info {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+  color: white;
+}
+
+.suivi-factures .stat-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.suivi-factures .stat-content h6 {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+.suivi-factures .stat-content h2 {
+  margin: 0.5rem 0 0 0;
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+
+.suivi-factures .stat-icon {
+  font-size: 2.5rem;
+  opacity: 0.3;
+}
+
+.suivi-factures .table {
+  margin-top: 1rem;
+}
+
+.suivi-factures .table th {
+  background-color: #343a40;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  vertical-align: middle;
+}
+
+.suivi-factures .table td {
+  vertical-align: middle;
+  padding: 10px;
+}
+
+.suivi-factures .table-warning {
+  background-color: #fff3cd !important;
+}
+
+.suivi-factures .form-control-sm {
+  font-size: 0.875rem;
+}
+
+.suivi-factures .badge-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.suivi-factures .badge-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.suivi-factures .badge-success {
+  background-color: #28a745;
+  color: white;
+}
+

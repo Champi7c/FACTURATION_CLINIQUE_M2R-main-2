@@ -1,0 +1,114 @@
+# =============================================================================
+# DOCKERFILE PRODUCTION - Backend Django
+# =============================================================================
+# Ce Dockerfile est optimisé pour la PRODUCTION:
+# - Multi-stage build pour réduire la taille de l'image
+# - Utilisateur non-root pour la sécurité
+# - Gunicorn comme serveur WSGI
+# - Collectstatic exécuté au build
+# - Pas de hot-reload
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# STAGE 1: Builder - Installation des dépendances
+# -----------------------------------------------------------------------------
+FROM python:3.11-slim AS builder
+
+WORKDIR /app
+
+# Variables d'environnement pour optimiser Python
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Installer les dépendances système pour la compilation
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    default-libmysqlclient-dev \
+    build-essential \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copier et installer les dépendances Python
+COPY requirements.txt .
+RUN pip install --user -r requirements.txt
+
+# -----------------------------------------------------------------------------
+# STAGE 2: Production - Image finale légère
+# -----------------------------------------------------------------------------
+FROM python:3.11-slim AS production
+
+# Labels pour documentation
+LABEL maintainer="DevOps Team" \
+      version="1.0" \
+      description="Facturation Clinique Backend - Production"
+
+WORKDIR /app
+
+# Variables d'environnement de production
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    PATH="/home/appuser/.local/bin:$PATH" \
+    # Variables Django
+    DJANGO_SETTINGS_MODULE=facturation_clinique.settings \
+    # Désactiver le mode debug
+    DEBUG=False
+
+# Installer uniquement les dépendances runtime (pas de build-essential)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    default-libmysqlclient-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Créer un utilisateur non-root pour la sécurité
+RUN groupadd --gid 1000 appgroup \
+    && useradd --uid 1000 --gid appgroup --shell /bin/bash --create-home appuser
+
+# Copier les dépendances Python depuis le builder
+COPY --from=builder /root/.local /home/appuser/.local
+
+# Copier le code de l'application
+# IMPORTANT: C'est ici que le code est "figé" dans l'image
+COPY --chown=appuser:appgroup . .
+
+# Créer les répertoires pour les fichiers statiques et media
+RUN mkdir -p /app/staticfiles /app/media \
+    && chown -R appuser:appgroup /app/staticfiles /app/media
+
+# Copier et rendre exécutable l'entrypoint de production
+COPY --chown=appuser:appgroup entrypoint.prod.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Pré-collecter les fichiers statiques (optimisation)
+# Note: Cette étape peut échouer si les variables DB ne sont pas définies
+# Dans ce cas, collectstatic sera exécuté dans l'entrypoint
+RUN python manage.py collectstatic --noinput --clear 2>/dev/null || true
+
+# Changer vers l'utilisateur non-root
+USER appuser
+
+# Exposer le port
+EXPOSE 8000
+
+# Point d'entrée
+ENTRYPOINT ["/entrypoint.sh"]
+
+# Commande par défaut: Gunicorn en production
+# - workers: nombre de processus (2-4 x CPU cores)
+# - timeout: temps max pour une requête
+# - keep-alive: maintenir les connexions ouvertes
+# - access-logfile: logs des requêtes
+CMD ["gunicorn", \
+     "--bind", "0.0.0.0:8000", \
+     "--workers", "3", \
+     "--threads", "2", \
+     "--timeout", "120", \
+     "--keep-alive", "5", \
+     "--access-logfile", "-", \
+     "--error-logfile", "-", \
+     "--capture-output", \
+     "--enable-stdio-inheritance", \
+     "facturation_clinique.wsgi:application"]
+

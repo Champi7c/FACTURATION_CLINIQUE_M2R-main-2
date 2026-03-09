@@ -1,0 +1,24 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_API_BASE_URL: /api
+    image: facturation-clinique-frontend:local
+    container_name: facturation-frontend
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - facturation-network
+    # Permet d'accéder au backend sur l'hôte
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # Alternative: utiliser le mode host network (Linux/Mac uniquement)
+    # network_mode: "host"  # Décommentez si vous êtes sur Linux/Mac
+
+networks:
+  facturation-network:
+    driver: bridge
+

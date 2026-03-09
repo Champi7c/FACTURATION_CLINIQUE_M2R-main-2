@@ -1,0 +1,42 @@
+/* Variables CSS - Couleurs principales */
+:root {
+  /* Couleur principale */
+  --bleu-nuit: #1e3a5f;
+  
+  /* Gradient */
+  --bleu-nuit-debut: #1e3a5f;
+  --bleu-nuit-fin: #2c4a6b;
+  
+  /* Hover */
+  --bleu-nuit-hover-debut: #0f2d4a;
+  --bleu-nuit-hover-fin: #1a3d5f;
+  
+  /* Ombres */
+  --ombre-bleue: rgba(30, 58, 95, 0.4);
+  --focus-bleu: rgba(30, 58, 95, 0.1);
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f9fa;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+* {
+  box-sizing: border-box;
+}

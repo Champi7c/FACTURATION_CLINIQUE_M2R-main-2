@@ -1,0 +1,9 @@
+# Configuration pour le développement
+# Utilisez: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  web:
+    # Override pour le développement: utilise runserver au lieu de gunicorn
+    command: python manage.py runserver 0.0.0.0:8000
+    # Le volume est déjà monté dans docker-compose.yml pour le hot reload
+

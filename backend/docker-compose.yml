@@ -1,0 +1,77 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: facturation_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-facturation_clinique}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+      # Ne pas définir MYSQL_USER si c'est root, MySQL le gère automatiquement
+      # Si vous voulez un utilisateur différent, définissez-le dans .env
+    ports:
+      - "${DB_PORT:-3317}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - facturation_network
+
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: devcgfbourse/facturation-clinique-backend:v1
+    container_name: facturation_backend
+    restart: unless-stopped
+    # Use gunicorn by default (production), override with runserver for development
+    # For development, uncomment the command line below:
+    # command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      # Mount volume for development (hot reload)
+      # Comment out for production
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME:-facturation_clinique}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-rootpassword}
+      - DB_PORT=3306
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - facturation_network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: facturation_phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "${PHPMYADMIN_PORT:-8080}:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: ${DB_USER:-root}
+      PMA_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - facturation_network
+
+volumes:
+  mysql_data:
+
+networks:
+  facturation_network:
+    driver: bridge
+

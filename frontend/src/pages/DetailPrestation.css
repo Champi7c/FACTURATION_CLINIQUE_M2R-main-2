@@ -1,0 +1,106 @@
+.detail-prestation-page {
+  padding: 2rem;
+}
+
+.detail-prestation-page .page-header {
+  margin-bottom: 2rem;
+}
+
+.detail-prestation-page .page-header h1 {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.stat-card {
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card-primary {
+  border-left: 4px solid #007bff;
+}
+
+.stat-card-success {
+  border-left: 4px solid #28a745;
+}
+
+.stat-card-info {
+  border-left: 4px solid #17a2b8;
+}
+
+.stat-card .card-body {
+  padding: 1.5rem;
+}
+
+.stat-card .card-title {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.stat-card .stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0.5rem 0;
+}
+
+.stat-card .stat-period {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.table-total {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.table-total th {
+  border-top: 2px solid #dee2e6;
+  padding: 1rem;
+}
+
+/* Styles pour les détails par patient */
+.detail-prestation-page .card.border-info {
+  border-left: 4px solid #17a2b8 !important;
+}
+
+.detail-prestation-page .list-unstyled li {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-prestation-page .list-unstyled li:last-child {
+  border-bottom: none;
+}
+
+/* Amélioration de l'affichage des services */
+.detail-prestation-page .list-unstyled li.bg-light {
+  border: 1px solid #dee2e6;
+  transition: box-shadow 0.2s;
+}
+
+.detail-prestation-page .list-unstyled li.bg-light:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa !important;
+}
+
+/* Style pour le nom du client */
+.detail-prestation-page .table tbody tr td:first-child {
+  font-size: 1rem;
+}
+
+.detail-prestation-page .table tfoot th {
+  background-color: #e7f3ff;
+  font-weight: 600;
+}
+
+

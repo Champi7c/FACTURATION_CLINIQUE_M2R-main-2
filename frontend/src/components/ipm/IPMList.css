@@ -1,0 +1,14 @@
+.ipm-list {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.btn-info {
+  background: #17a2b8;
+  color: white;
+}
+
+.btn-info:hover {
+  background: #138496;
+}
+

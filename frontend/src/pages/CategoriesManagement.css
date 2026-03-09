@@ -1,0 +1,25 @@
+.categories-management {
+  width: 100%;
+}
+
+.categories-management .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.categories-management .card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.categories-management .card.border-primary {
+  border-width: 2px !important;
+}
+
+.categories-management .card-title {
+  text-transform: capitalize;
+  font-weight: bold;
+  color: #007bff;
+}
+

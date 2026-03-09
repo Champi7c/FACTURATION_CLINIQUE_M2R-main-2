@@ -1,0 +1,250 @@
+.devis-detail-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.devis-card {
+  background: white;
+}
+
+.devis-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--bleu-nuit);
+}
+
+.devis-clinique h3 {
+  color: var(--bleu-nuit);
+  margin-bottom: 10px;
+}
+
+.devis-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.devis-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.devis-clinique-info {
+  flex: 1;
+}
+
+.devis-info h4 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.devis-patient {
+  margin-bottom: 30px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.devis-patient h5 {
+  margin-bottom: 15px;
+  color: var(--bleu-nuit);
+}
+
+.devis-patient p {
+  margin: 5px 0;
+}
+
+.devis-info-table {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.devis-info-table thead th {
+  background-color: var(--bleu-nuit);
+  color: white;
+  font-weight: bold;
+  padding: 8px;
+  font-size: 0.85rem;
+}
+
+.devis-info-table tbody td {
+  padding: 8px;
+  vertical-align: middle;
+}
+
+.devis-table {
+  margin-bottom: 40px;
+}
+
+.devis-analyses-table {
+  font-size: 0.85rem;
+}
+
+.devis-analyses-table thead th {
+  background-color: var(--bleu-nuit);
+  color: white;
+  font-weight: bold;
+  padding: 6px 8px;
+  font-size: 0.8rem;
+}
+
+.devis-analyses-table tbody td {
+  padding: 6px 8px;
+  vertical-align: middle;
+}
+
+.badge-sm {
+  font-size: 0.75rem;
+  padding: 2px 6px;
+}
+
+.text-end {
+  text-align: right;
+}
+
+.devis-signature {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.signature-line {
+  width: 200px;
+  height: 1px;
+  background: #333;
+  margin: 10px auto;
+}
+
+.signature-name {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .page-header {
+    display: none !important;
+  }
+
+  /* Réduire la taille pour tenir sur une seule page A4 */
+  .devis-detail-page {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .devis-card {
+    box-shadow: none;
+    border: none;
+    page-break-inside: avoid;
+    /* Légère réduction pour tenir sur une page */
+    transform: scale(0.92);
+    transform-origin: top left;
+    width: 108.7%;
+  }
+
+  .devis-card .card-body {
+    padding: 8px !important;
+  }
+
+  .devis-header {
+    margin-bottom: 8px !important;
+    padding-bottom: 6px !important;
+    border-bottom-width: 1px !important;
+  }
+
+  .devis-logo {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .devis-clinique h3 {
+    font-size: 1rem !important;
+    margin-bottom: 2px !important;
+  }
+
+  .devis-clinique-info p,
+  .devis-info p {
+    font-size: 0.7rem !important;
+    margin: 1px 0 !important;
+  }
+
+  .devis-info h4 {
+    font-size: 0.9rem !important;
+    margin-bottom: 2px !important;
+  }
+
+  .devis-patient {
+    margin-bottom: 8px !important;
+    padding: 6px 8px !important;
+  }
+
+  .devis-patient h5 {
+    font-size: 0.8rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  .devis-patient p {
+    font-size: 0.7rem !important;
+    margin: 2px 0 !important;
+  }
+
+  .devis-table {
+    margin-bottom: 8px !important;
+  }
+
+  .devis-table .table thead th {
+    padding: 4px 6px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .devis-table .table tbody td {
+    padding: 3px 6px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .devis-table .table-category-separator td,
+  .devis-table tr[style*="background-color: #f8f9fa"] td {
+    padding: 2px 6px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .devis-table .table-total th {
+    padding: 4px 6px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .devis-table tfoot tr td {
+    padding: 3px 6px !important;
+    font-size: 0.7rem !important;
+  }
+
+  .devis-signature {
+    margin-top: 15px !important;
+  }
+
+  .devis-signature > p:first-child {
+    font-size: 0.8rem !important;
+  }
+
+  .signature-line {
+    width: 120px !important;
+    margin: 4px auto !important;
+  }
+
+  .signature-name {
+    font-size: 0.7rem !important;
+    margin-top: 2px !important;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

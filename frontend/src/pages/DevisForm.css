@@ -1,0 +1,172 @@
+.devis-form-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+#analyse-select {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 5px;
+}
+
+#analyse-select option {
+  padding: 8px;
+  cursor: pointer;
+}
+
+#analyse-select option:hover {
+  background-color: #f0f0f0;
+}
+
+#analyse-select option:checked {
+  background-color: var(--bleu-nuit);
+  color: white;
+}
+
+.patient-info {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+}
+
+.patient-info p {
+  margin: 5px 0;
+}
+
+.table-total {
+  background-color: var(--bleu-nuit);
+  color: white;
+}
+
+.table-total th {
+  color: white;
+  font-weight: bold;
+}
+
+.badge-primary {
+  background-color: var(--bleu-nuit);
+  color: white;
+}
+
+.analyses-selection {
+  margin-top: 15px;
+}
+
+.analyses-list-container {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  background: white;
+}
+
+.analyses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.analyse-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+.analyse-item:hover:not(.disabled) {
+  background-color: #f0f0f0;
+  border-color: var(--bleu-nuit);
+  transform: translateX(5px);
+}
+
+.analyse-item.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f8f8f8;
+}
+
+.analyse-name {
+  flex: 1;
+  font-weight: 500;
+  color: #333;
+}
+
+.analyse-prix {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.analyses-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.analyses-list-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.analyses-list-container::-webkit-scrollbar-thumb {
+  background: var(--bleu-nuit);
+  border-radius: 4px;
+}
+
+.analyses-list-container::-webkit-scrollbar-thumb:hover {
+  background: #5568d3;
+}
+
+.recap-summary {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+}
+
+.recap-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.recap-item:last-child {
+  border-bottom: none;
+}
+
+.recap-item.total-net {
+  margin-top: 10px;
+  padding-top: 15px;
+  border-top: 2px solid var(--bleu-nuit);
+  border-bottom: none;
+  font-weight: bold;
+}
+
+.recap-label {
+  font-weight: 500;
+  color: #333;
+}
+
+.recap-value {
+  font-weight: 600;
+  color: var(--bleu-nuit);
+  font-size: 1.1em;
+}
+
+.recap-value.highlight {
+  color: #28a745;
+  font-size: 1.2em;
+}
+
+.recap-item.total-net .recap-value {
+  color: #28a745;
+  font-size: 1.3em;
+}
+

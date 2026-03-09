@@ -1,0 +1,67 @@
+.statistiques-page {
+  padding: 20px;
+}
+
+.stat-card {
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card-ipm {
+  border-left: 4px solid var(--bleu-nuit);
+}
+
+.stat-card-assurance {
+  border-left: 4px solid #f093fb;
+}
+
+.stat-card-total {
+  border-left: 4px solid #4facfe;
+}
+
+.stat-card .card-title {
+  color: #333;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--bleu-nuit);
+  margin: 10px 0;
+}
+
+.stat-period {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.table-total {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.table-total th {
+  border-top: 2px solid #dee2e6;
+}
+
+@media print {
+  .stat-card {
+    break-inside: avoid;
+  }
+}
+
+
+
